@@ -21,20 +21,20 @@ General I/O
 
 .. function:: open(file_name, [read, write, create, truncate, append]) -> IOStream
 
-   Open a file in a mode specified by five boolean arguments. The default is to open files for reading only. Returns a stream for accessing the file.
+   Open a file (specified by the string file_name) in a mode specified by five boolean arguments. The default is to open files for reading only. Returns a stream for accessing the file.
 
 .. function:: open(file_name, [mode]) -> IOStream
 
    Alternate syntax for open, where a string-based mode specifier is used instead of the five booleans. The values of ``mode`` correspond to those from ``fopen(3)`` or Perl ``open``, and are equivalent to setting the following boolean groups:
 
-   ==== =================================
-    r    read
-    r+   read, write
-    w    write, create, truncate
-    w+   read, write, create, truncate
-    a    write, create, append
-    a+   read, write, create, append
-   ==== =================================
+   ====== =================================
+    "r"    read
+    "r+"   read, write
+    "w"    write, create, truncate
+    "w+"   read, write, create, truncate
+    "a"    write, create, append
+    "a+"   read, write, create, append
+   ====== =================================
 
 
 .. function:: open(f::function, args...)
