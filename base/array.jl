@@ -101,6 +101,8 @@ function copy(a::Array)
     ccall(:memcpy, Ptr{Void}, (Ptr{Void}, Ptr{Void}, UInt), b, a, sizeof(a))
     return b
 end
+mutablecopy(a::Array) = copy(a)
+mutablecopy{N}(a::Array, ::Type{N}) = convert(Array{N}, a)
 
 function reinterpret{T,S}(::Type{T}, a::Array{S,1})
     nel = Int(div(length(a)*sizeof(S),sizeof(T)))

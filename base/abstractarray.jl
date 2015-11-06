@@ -197,6 +197,10 @@ similar(   a::AbstractArray, T::Type, dims::Integer...)  = similar(a, T, dims)
 # similar creates an Array by default
 similar(   a::AbstractArray, T::Type, dims::DimsInteger) = Array(T, dims...)
 similar(   a::AbstractArray, T::Type, dims::Dims)        = Array(T, dims)
+# mutablecopy fall-back to a dense array
+mutablecopy{T}(A::AbstractArray{T}) = copy!(Array{T}(size(A)), A)
+mutablecopy(A::AbstractArray, T::Type) = copy!(Array{T}(size(A)), A)
+#mutablecopy(a::AbstractArray) = copy!(similar(a), a)
 
 function reshape(a::AbstractArray, dims::Dims)
     if prod(dims) != length(a)

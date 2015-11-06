@@ -373,7 +373,8 @@ transpose(r::Range) = r'
 
 # Ranges are immutable
 copy(r::Range) = r
-
+mutablecopy(r::Range) = collect(r)
+mutablecopy(r::Range, T::Type) = collect(T, r)
 
 ## iteration
 

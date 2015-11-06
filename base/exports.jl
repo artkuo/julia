@@ -558,6 +558,7 @@ export
     minimum!,
     minimum,
     minmax,
+    mutablecopy,
     ndims,
     nonzeros,
     nthperm!,

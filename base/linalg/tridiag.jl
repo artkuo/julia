@@ -262,6 +262,20 @@ function getindex{T}(A::SymTridiagonal{T}, i::Integer, j::Integer)
     end
 end
 
+setindex!(A::SymTridiagonal, v, i::Int, j::Int) = (checkbounds(A, i, j); unsafe_setindex!(A, v, i, j))
+function unsafe_setindex!(A::SymTridiagonal, v, i::Int, j::Int)
+    if i == j
+        unsafe_setindex!(A.dv, v, i)
+    elseif i == j+1 # lower diagonal
+        unsafe_setindex!(A.ev, v, j)
+    elseif i+1 == j # upper diagonal
+        unsafe_setindex!(A.ev, v, i)
+    elseif v != 0
+        throw(ArgumentError("cannot set a non tri-diagonal index ($i, $j) to a nonzero value ($v)"))
+    end
+    A
+end
+
 ## Tridiagonal matrices ##
 immutable Tridiagonal{T} <: AbstractMatrix{T}
     dl::Vector{T}    # sub-diagonal
@@ -310,6 +324,12 @@ function similar(M::Tridiagonal, T, dims::Dims)
     end
     Tridiagonal{T}(similar(M.dl), similar(M.d), similar(M.du), similar(M.du2))
 end
+
+# mutablecopy(M [, T])
+#mutablecopy(M::Tridiagonal) = full(M)
+#mutablecopy(M::Tridiagonal, T::Type) = convert(Matrix{T}, M)
+
+# similar falls back on AbstractArray
 
 # Operations on Tridiagonal matrices
 copy!(dest::Tridiagonal, src::Tridiagonal) = Tridiagonal(copy!(dest.dl, src.dl), copy!(dest.d, src.d), copy!(dest.du, src.du), copy!(dest.du2, src.du2))
@@ -449,4 +469,18 @@ function A_mul_B!(C::AbstractVecOrMat, A::Tridiagonal, B::AbstractVecOrMat)
         end
     end
     C
+end
+
+setindex!(A::Tridiagonal, v, i::Int, j::Int) = (checkbounds(A, i, j); unsafe_setindex!(A, v, i, j))
+function unsafe_setindex!(A::Tridiagonal, v, i::Int, j::Int)
+    if i == j
+        unsafe_setindex!(A.d, v, i)
+    elseif i == j+1 # lower diagonal
+        unsafe_setindex!(A.dl, v, j)
+    elseif i+1 == j # upper diagonal
+        unsafe_setindex!(A.du, v, i)
+    elseif v != 0
+        throw(ArgumentError("cannot set a non tri-diagonal index ($i, $j) to a nonzero value ($v)"))
+    end
+    A
 end

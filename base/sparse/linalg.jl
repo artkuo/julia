@@ -870,3 +870,8 @@ end
 chol(A::SparseMatrixCSC) = error("Use cholfact() instead of chol() for sparse matrices.")
 lu(A::SparseMatrixCSC) = error("Use lufact() instead of lu() for sparse matrices.")
 eig(A::SparseMatrixCSC) = error("Use eigs() instead of eig() for sparse matrices.")
+
+mutablecopy{T,Ti}(A::UpperTriangular{T,SparseMatrixCSC{T,Ti}}) = triu(A.data)
+mutablecopy{T,Ti}(A::LowerTriangular{T,SparseMatrixCSC{T,Ti}}) = tril(A.data)
+# Base.LinAlg.UnitUpperTriangular & UnitLowerTriangular currently drop down to
+# dense mutablecopies

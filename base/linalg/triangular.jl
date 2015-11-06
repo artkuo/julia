@@ -994,7 +994,7 @@ end
 ### Left division with triangle to the left hence rhs cannot be transposed. No quotients.
 for (f, g) in ((:\, :A_ldiv_B!), (:Ac_ldiv_B, :Ac_ldiv_B!), (:At_ldiv_B, :At_ldiv_B!))
     @eval begin
-        function ($f){TA,TB,S}(A::Union{UnitUpperTriangular{TA,S},UnitLowerTriangular{TA,S}}, B::StridedVecOrMat{TB})
+        function ($f){TA,TB,S}(A::Union{UnitUpperTriangular{TA,S},UnitLowerTriangular{TA,S}}, B::AbstractVecOrMat{TB})
             TAB = typeof(zero(TA)*zero(TB) + zero(TA)*zero(TB))
             ($g)(convert(AbstractArray{TAB}, A), copy_oftype(B, TAB))
         end
@@ -1003,7 +1003,7 @@ end
 ### Left division with triangle to the left hence rhs cannot be transposed. Quotients.
 for (f, g) in ((:\, :A_ldiv_B!), (:Ac_ldiv_B, :Ac_ldiv_B!), (:At_ldiv_B, :At_ldiv_B!))
     @eval begin
-        function ($f){TA,TB,S}(A::Union{UpperTriangular{TA,S},LowerTriangular{TA,S}}, B::StridedVecOrMat{TB})
+        function ($f){TA,TB,S}(A::Union{UpperTriangular{TA,S},LowerTriangular{TA,S}}, B::AbstractVecOrMat{TB})
             TAB = typeof((zero(TA)*zero(TB) + zero(TA)*zero(TB))/one(TA))
             ($g)(convert(AbstractArray{TAB}, A), copy_oftype(B, TAB))
         end
